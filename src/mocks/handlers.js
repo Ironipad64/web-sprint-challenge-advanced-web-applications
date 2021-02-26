@@ -98,15 +98,15 @@ export const handlers = [
     const { username, password } = req.body;
     if (username === "Lambda School" && password === "i<3Lambd4") {
       return res(
-          ctx.status(200),
-          ctx.json({
-              payload: token,
-          }))
+        ctx.status(200),
+        ctx.json({
+          payload: token,
+        }))
     } else {
-        return res(
-            ctx.status(403),
-            ctx.json({ error: "Username or Password incorrect. Please see Readme" })
-        );
+      return res(
+        ctx.status(403),
+        ctx.json({ error: "Username or Password incorrect. Please see Readme" })
+      );
     }
   }),
   // Handles a GET /user request
@@ -133,7 +133,7 @@ export const handlers = [
       }
       nextId = nextId + 1;
       return res(
-        ctx.status(201), 
+        ctx.status(201),
         ctx.json(colors)
       );
     } else {
