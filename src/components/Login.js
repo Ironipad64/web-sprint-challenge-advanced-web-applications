@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import styled from 'styled-components'
-// import { render } from "@testing-library/react";
-
-class Login extends React.Component {
 
 
-  state = {
+
+const Login = () => {
+  const state = {
     credentials: {
       username: "",
       password: "",
@@ -14,80 +12,65 @@ class Login extends React.Component {
     error: "",
   }
 
-  // make a post request to retrieve a token from the api
-  // when you have handled the token, navigate to the BubblePage route
+  const [values, setValues] = useState(state)
 
-  handleChange = (e) => {
-    this.setState({
+
+
+  const handleChange = (e) => {
+    this.setValues({
       credentials: {
-        ...this.state.credentials,
+        ...state.credentials,
         [e.target.name]: e.target.value,
       },
       error: "",
     });
   };
 
-  login = (e) => {
-    e.preventDefualt();
+
+
+  useEffect((e) => {
     axios
-      .post("http://localhost:5000/api/login", this.state.credentials)
+      .post("http://localhost:5000/api/login", state.credentials)
       .then((res) => {
+        console.log(res);
         localStorage.setItem("token", JSON.stringify(res.data.payload));
-        this.props.history.push("/protected");
-        // console.log(res)
+        e.props.history.push("/protected")
       })
-      .catch((err) => this.setState({ error: err.response.data.error }));
-  }
+      .catch((err) => {
+        console.log(err);
+      })
+    // make a post request to retrieve a token from the api
+    // when you have handled the token, navigate to the BubblePage route
+  });
 
-  // useEffect(() => {
-  //   getData();
-  // });
-
-  render() {
-    return (
-      <StyledLogih>
-        <h1>
-          Welcome to the Bubble App!
-          
+  return (
+    <>
+      <h1>
+        Welcome to the Bubble App!
         <p>Build a login page here</p>
-        </h1>
-        <div>
-          <form onSubmit={this.login}>
-            <input
-              type="text"
-              name="username"
-              value={this.state.credentials.username}
-              onChange={this.handleChange}
-            />
-            <input
-              type="text"
-              name="password"
-              value={this.state.credentials.password}
-              onChange={this.handleChange}
-            />
-            <p style={{ color: `red`, fontSize: "14px" }}> {this.state.error} </p>
-            <button>Log in</button>
-          </form>
-        </div>
+      </h1>
+      <div>
+        <form onSubmit={Login}>
+          <input
+            type="text"
+            name="username"
+            value={state.credentials.username}
+            onChange={handleChange}
+          />
 
-      </StyledLogih>
-    );
-  }
-
+          <input
+            type="text"
+            name="password"
+            value={state.credentials.password}
+            onChange={handleChange}
+          />
+        </form>
+      </div>
+    </>
+  );
 };
 
 export default Login;
-
-const StyledLogih = styled.div`
-  display: flex;
-  flex-flow: center;
-  margin: 0 0 36px;
-  padding: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-
-  margin-right: 6px;
-  color: #204963;
-`
 
 //Task List:
 //1. Build a form containing a username and password field.

@@ -12,10 +12,18 @@ const BubblePage = () => {
   const getData = () => {
     const token = JSON.parse(localStorage.getItem("token"))
     axiosWithAuth()
-      .get("")
-      .then()
-      .catch()
+      .get("/api/data")
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
+
+  useEffect(() => {
+    getData();
+  })
 
   return (
     <>
