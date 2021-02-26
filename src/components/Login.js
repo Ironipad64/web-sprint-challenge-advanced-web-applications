@@ -5,7 +5,7 @@ const Login = () => {
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
 
-  useEffect(()=>{
+  useEffect(() => {
     // make a post request to retrieve a token from the api
     // when you have handled the token, navigate to the BubblePage route
   });
@@ -15,6 +15,24 @@ const Login = () => {
       <h1>
         Welcome to the Bubble App!
         <p>Build a login page here</p>
+        <div>
+          <form>
+            <input
+              type="text"
+              name="username"
+            // value={this.state.credentials.username}
+            // onChange={this.handleChange}
+            />
+            <input
+              type="password"
+              name="password"
+            // value={this.state.credentials.password}
+            // onChange={this.handleChange}
+            />
+            {/* <p style={{ color: `red`, fontSize: "12px" }}>{this.state.error}</p> */}
+            <button>Log in</button>
+          </form>
+        </div>
       </h1>
     </>
   );
