@@ -1,71 +1,91 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useHistory } from 'react-router-dom';
+import axiosWithAuth from '../helpers/axiosWithAuth';
 
+const initForm = {
+  username: "Lambda School",
+  password: "i<3Lambd4"
+};
 
+const initError = {
+  error: ""
+};
 
 const Login = () => {
-  const state = {
-    credentials: {
-      username: "",
-      password: "",
-    },
-    error: "",
-  }
+  // make a post request to retrieve a token from the api
+  // when you have handled the token, navigate to the BubblePage route
+  const [form, setForm] = useState(initForm);
+  const [error, setError] = useState(initError);
 
-  const [values, setValues] = useState(state)
-
-
+  const history = useHistory();
 
   const handleChange = (e) => {
-    this.setValues({
-      credentials: {
-        ...state.credentials,
-        [e.target.name]: e.target.value,
-      },
-      error: "",
-    });
-  };
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    })
+  }
 
-
-
-  useEffect((e) => {
-    axios
-      .post("http://localhost:5000/api/login", state.credentials)
+  const login = (e) => {
+    e.preventDefault();
+    axiosWithAuth()
+      .post("/api/login", form)
       .then((res) => {
-        console.log(res);
-        localStorage.setItem("token", JSON.stringify(res.data.payload));
-        e.props.history.push("/protected")
+        localStorage.setItem('token', JSON.stringify(res.data.payload));
+        history.push('/bubble')
       })
       .catch((err) => {
-        console.log(err);
+        setError({ error: "Username or Password not valid." });
       })
-    // make a post request to retrieve a token from the api
-    // when you have handled the token, navigate to the BubblePage route
+  }
+
+
+
+  useEffect(() => {
+    axios
+      .delete(`http://localhost:5000/api/colors/1`, {
+        headers: {
+          'authorization': "ahuBHejkJJiMDhmODZhZi0zaeLTQ4ZfeaseOGZgesai1jZWYgrTA07i73Gebhu98"
+        }
+      })
+      .then(res => {
+        axios.get(`http://localhost:5000/api/colors`, {
+          headers: {
+            'authorization': ""
+          }
+        })
+          .then(res => {
+            console.log(res);
+          });
+        console.log(res);
+      })
   });
 
   return (
     <>
       <h1>
         Welcome to the Bubble App!
-        <p>Build a login page here</p>
-      </h1>
-      <div>
-        <form onSubmit={Login}>
+       <form onSubmit={login}>
+          <label>Username</label>
           <input
             type="text"
             name="username"
-            value={state.credentials.username}
+            value={form.username}
             onChange={handleChange}
           />
 
+          <label>Password</label>
           <input
-            type="text"
+            type="password"
             name="password"
-            value={state.credentials.password}
+            value={form.password}
             onChange={handleChange}
           />
+          <p style={{ color: `red`, fontSize: "12px" }}>{error.error}</p>
+          <button>Log in</button>
         </form>
-      </div>
+      </h1>
     </>
   );
 };
@@ -73,8 +93,8 @@ const Login = () => {
 export default Login;
 
 //Task List:
-//1. Build a form containing a username and password field.
-//2. Add whatever state nessiary for form functioning.
-//3. MAKE SURE THAT FORM INPUTS INCLUDE THE LABEL TEXT "username" and "password" RESPECTIVELY.
-//4. If either the username or password is not displaied display EXACTLY the following words: Username or Password not valid.
-//5. If the username / password is equal to Lambda School / i<3Lambd4, save that token to localStorage.
+//1. [x] Build a form containing a username and password field.
+//2. [x] Add whatever state nessiary for form functioning.
+//3. [x] MAKE SURE THAT FORM INPUTS INCLUDE THE LABEL TEXT "username" and "password" RESPECTIVELY.
+//4. [x] If either the username or password is not displaied display EXACTLY the following words: Username or Password not valid.
+//5. [x] If the username / password is equal to Lambda School / i<3Lambd4, save that token to localStorage.
